@@ -1,4 +1,4 @@
-const api_url = "https://jsonplaceholder.typicode.com/users";
+const api_url = "https://jsonplaceholder.typicode.com/posts";
 
 document.addEventListener('DOMContentLoaded', function () {
   const urlText = document.getElementById("url");
@@ -7,12 +7,13 @@ document.addEventListener('DOMContentLoaded', function () {
 });
 
 // Defining async function
-async function getapi(url,method) {
+async function getapi(url,method,body) {
   try {
     const response = await fetch(url, {
       method: method,
+      body: JSON.stringify(body), 
       headers: {
-        'Accept': 'application/json',
+        'Content-type': 'application/json; charset=UTF-8',
       },
     });
 
@@ -20,6 +21,7 @@ async function getapi(url,method) {
       throw new Error(`HTTP error! Status: ${response.status}`);
     }
     const data = await response.json();
+
     show(data);
     console.log(data);
   } catch (err) {
@@ -33,18 +35,18 @@ async function show(data) {
 	let tab = 
 		`<tr>
     <th>Id</th>
-		<th>Name</th>
-		<th>Username</th>
-		<th>Email</th>
+		<th>Title</th>
+		<th>Body</th>
+		<th>UserId</th>
 		</tr>`;
 
 	// Loop to access all rows 
 	for (let i= 0; i < data.length; i++ ) {
 		tab += `<tr> 
     <td>${data[i].id} </td>
-	  <td>${data[i].name} </td>
-	  <td>${data[i].username}</td>
-	  <td>${data[i].email}</td> 
+	  <td>${data[i].title} </td>
+	  <td>${data[i].body}</td>
+	  <td>${data[i].userId}</td> 
   </tr>`;
 	}
 	// Setting innerHTML as tab variable
@@ -52,16 +54,37 @@ async function show(data) {
 }
 
 function getInput(){
+  const methodValue = document.getElementById("method").value; 
   const idValue = document.getElementById("id").value;
-  const methodValue = document.getElementById("method").value;
+  const titleValue = document.getElementById("title").value;
+  const bodyValue = document.getElementById("body").value;
+  const userIdValue = document.getElementById("userId").value;
+   
+  console.log(methodValue);
+  console.log(idValue);
+  console.log(titleValue);  
+  console.log(bodyValue);
+  console.log(userIdValue);
 
-  if(idValue){
-     console.log("id");
+ 
+  if (methodValue == 'GET') {
+    if(idValue){
      const new_url = api_url+'?id='+idValue;
       getapi(new_url,methodValue);
-  }else{
-      console.log('! id');
+    }else{
+      getapi(api_url,methodValue);
+     }
+  }else if(methodValue == 'POST'){
+     const body ={
+      title: titleValue,
+      body: bodyValue,
+      userId: userIdValue
+    }
+     getapi(api_url,methodValue,body);
+
   }
+
+
 }
 
 
