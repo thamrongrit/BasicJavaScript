@@ -83,12 +83,6 @@ function getInput(){
   const titleValue = document.getElementById("title").value;
   const bodyValue = document.getElementById("body").value;
   const userIdValue = document.getElementById("userId").value;
-   
-  console.log(methodValue);
-  console.log(idValue);
-  console.log(titleValue);  
-  console.log(bodyValue);
-  console.log(userIdValue);
 
  
   if (methodValue == 'GET') {
