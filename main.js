@@ -1,5 +1,7 @@
 const api_url = "https://jsonplaceholder.typicode.com/posts";
 
+// Calling that async function
+
 document.addEventListener('DOMContentLoaded', function () {
   const urlText = document.getElementById("url");
   urlText.value = api_url;
@@ -7,11 +9,10 @@ document.addEventListener('DOMContentLoaded', function () {
 });
 
 // Defining async function
-async function getapi(url,method,body) {
+async function getapi(url,method) {
   try {
     const response = await fetch(url, {
       method: method,
-      body: JSON.stringify(body), 
       headers: {
         'Content-type': 'application/json; charset=UTF-8',
       },
@@ -28,8 +29,30 @@ async function getapi(url,method,body) {
     console.error(err);
   }
 }
-// Calling that async function
 
+async function postapi(url,method,body) {
+  try {
+    const response = await fetch(url, {
+      method: method,
+      body: JSON.stringify(body), 
+      headers: {
+        'Content-type': 'application/json; charset=UTF-8',
+      },
+    });
+
+    if (!response.ok) {
+      throw new Error(`HTTP error! Status: ${response.status}`);
+    }
+    const data = await response.json();
+    const obj =[];
+    obj.push(data);
+    console.log(obj);
+
+    show(obj);
+  } catch (err) {
+    console.error(err);
+  }
+}
 // Function to define innerHTML for HTML table
 async function show(data) {
 	let tab = 
@@ -75,14 +98,44 @@ function getInput(){
       getapi(api_url,methodValue);
      }
   }else if(methodValue == 'POST'){
-     const body ={
+     const body = {
       title: titleValue,
       body: bodyValue,
       userId: userIdValue
-    }
-     getapi(api_url,methodValue,body);
+    };
+     postapi(api_url,methodValue,body);
 
-  }
+  }else if(methodValue == 'PUT'){
+    const body = {
+     id : idValue,
+     title: titleValue,
+     body: bodyValue,
+     userId: userIdValue
+   };
+    const new_url = api_url+'/'+idValue;
+    postapi(new_url,methodValue,body);
+
+ }else if(methodValue == 'PATCH'){
+  const body = {
+   id : idValue,
+   title: titleValue,
+   body: bodyValue,
+   userId: userIdValue
+ };
+  const new_url = api_url+'/'+idValue;
+  postapi(new_url,methodValue,body);
+
+}else if(methodValue == 'DELETE'){
+  const body = {
+   id : idValue,
+   title: titleValue,
+   body: bodyValue,
+   userId: userIdValue
+ };
+  const new_url = api_url+'/'+idValue;
+  postapi(new_url,methodValue,body);
+
+}
 
 
 }
